@@ -100,6 +100,44 @@ Python (yoga-t1)
 
 ---
 
+### 4. Comparar técnicas clássicas alternativas
+
+Além do notebook principal, o projeto inclui um script para comparar combinações de
+**features clássicas** e **classificadores tradicionais**, o que ajuda na escrita do artigo
+e na justificativa da escolha final do pipeline.
+
+Exemplo:
+
+```bash
+python benchmark_classic_techniques.py
+```
+
+Para uma rodada mais rápida, limitada por classe:
+
+```bash
+python benchmark_classic_techniques.py --limit-per-class 20
+```
+
+O script salva:
+- uma tabela CSV com os resultados em `outputs/benchmarks/benchmark_results.csv`
+- relatórios por experimento em `outputs/benchmarks/`
+- cache das features para acelerar novas execuções
+
+As combinações implementadas incluem:
+- `baseline_hog_shape`: HOG + contorno + Hu moments + densidade de bordas
+- `hog_lbp_shape`: baseline + histograma de LBP
+- `hog_projection_shape`: baseline + perfis de projeção da silhueta
+- `shape_lbp_projection`: descritores leves de forma + textura + projeção
+
+Os classificadores disponíveis são:
+- `svm_rbf`
+- `svm_rbf_balanced`
+- `linear_svm_balanced`
+- `random_forest`
+- `mlp`
+
+---
+
 ## Dependências
 
 O arquivo `requirements.txt` deve conter:
@@ -331,6 +369,12 @@ A escolha se justifica porque:
 - é eficiente em bases de tamanho moderado
 - é adequado para POCs com features manuais
 
+Como alternativas válidas para comparação no trabalho, também podem ser utilizados:
+- **SVM com balanceamento de classes**, para reduzir o impacto do desbalanceamento
+- **Linear SVM**, como baseline mais simples e rápido
+- **Random Forest**, para comparar com um modelo baseado em árvores
+- **MLP**, que é permitido pelo enunciado e pode servir como comparação sem usar deep learning
+
 ---
 
 ### 11. Predição
@@ -362,4 +406,3 @@ Permite visualizar:
 - quais classes são mais confundidas
 - quais poses são melhor reconhecidas
 - quais erros ocorrem com maior frequência
-
