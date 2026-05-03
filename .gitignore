@@ -9,3 +9,9 @@ __MACOSX/
 .AppleDouble
 .LSOverride
 Icon[]
+
+#pastas
+dataset_blur/
+dataset_copia/
+dataset_grayscale/
+dataset_redimensionado/
