@@ -1,0 +1,17 @@
+.venv/
+outputs/
+__pycache__/
+
+# General
+.DS_Store
+.localized
+__MACOSX/
+.AppleDouble
+.LSOverride
+Icon[]
+
+#pastas
+dataset_blur/
+dataset_copia/
+dataset_grayscale/
+dataset_redimensionado/
