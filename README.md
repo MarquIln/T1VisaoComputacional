@@ -1,14 +1,72 @@
-# Classificação de Poses de Yoga com OpenCV
-Este projeto apresenta uma prova de conceito (POC) para classificação de poses de yoga a partir de imagens estáticas, utilizando técnicas clássicas de Processamento Digital de Imagens, extração de características visuais e aprendizado de máquina.
+# Classificação de Poses de Yoga com Visão Computacional
 
-## Objetivo
-O objetivo do projeto é desenvolver uma metodologia capaz de identificar poses de yoga em imagens, tratando o problema como uma tarefa de classificação multiclasse.
+## Grupo
 
-## Visão geral da solução
-O pipeline desenvolvido segue uma abordagem clássica de visão computacional:
+Ana Carolina Poletto  
+Bárbara Dapper  
+Marcos Vinicius Raach  
 
-Imagem de entrada
-→ Leitura do dataset
+## Objetivo do trabalho
+
+Este projeto tem como objetivo desenvolver uma prova de conceito para **classificação automática de poses de yoga a partir de imagens estáticas**, utilizando técnicas de Visão Computacional e Aprendizado de Máquina.
+
+O trabalho foi desenvolvido em duas partes. Na primeira, foi construído um pipeline clássico com OpenCV, extração de features com HOG e classificação com SVM. Na segunda, foi criada uma continuação do pipeline utilizando uma abordagem baseada em rede neural, com MediaPipe para extração de landmarks corporais, cálculo de ângulos e classificação com uma MLP.
+
+## Como criar e usar o ambiente virtual
+
+### 1. Criar o ambiente virtual
+
+No macOS/Linux:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+No Windows PowerShell:
+
+```bash
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+### 2. Instalar as dependências
+
+Com o ambiente virtual ativado, execute:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+### 3. Registrar o kernel no Jupyter
+
+```bash
+python -m ipykernel install --user --name yoga-visao --display-name "Python (yoga-visao)"
+```
+
+Depois, ao abrir os notebooks, selecione o kernel:
+
+```text
+Python (yoga-visao)
+```
+
+## Notebooks do projeto
+
+### `pipelineTeste.ipynb`
+
+Notebook utilizado para testar técnicas experimentais durante o desenvolvimento do trabalho.
+
+Esse pipeline serviu para avaliar alternativas de pré-processamento e extração de características que, ao final, não foram mantidas na solução principal. Ele foi importante para comparação e escolha das etapas mais adequadas, mas não representa o pipeline final adotado.
+
+### `pipelineFinal.ipynb`
+
+Notebook referente à Parte 1 do projeto.
+
+Ele contém o pipeline clássico final, composto pelas seguintes etapas:
+
+```text
+Leitura do dataset
 → Redimensionamento com padding
 → Conversão para escala de cinza
 → Suavização com filtro Gaussiano
@@ -19,79 +77,26 @@ Imagem de entrada
 → Treinamento com SVM
 → Predição
 → Avaliação dos resultados
+```
 
-A etapa mais importante do pipeline é a extração de características com HOG, pois ela transforma a imagem em um vetor numérico baseado nas orientações dos gradientes, capturando informações relacionadas à forma, bordas e estrutura corporal da pose.
+Esse pipeline utiliza técnicas clássicas de processamento de imagens e aprendizado de máquina para classificar as poses de yoga.
 
+### `pipelineRedeNeural_MediaPipe_MLP_corrigido.ipynb`
 
-Como instalar e rodar
+Notebook referente à Parte 2 do projeto.
 
-1. Criar ambiente virtual
+Ele dá continuidade ao trabalho anterior utilizando uma abordagem mais adequada para classificação de poses corporais. O pipeline mantém o uso de OpenCV no pré-processamento e utiliza MediaPipe para extrair pontos do corpo, que são transformados em features geométricas, como coordenadas e ângulos articulares.
 
-macOS / Linux
+O fluxo principal é:
 
-python3 -m venv .venv
-source .venv/bin/activate
+```text
+Imagem
+→ Pré-processamento com OpenCV
+→ Extração de landmarks corporais com MediaPipe
+→ Cálculo de features geométricas e ângulos
+→ Treinamento de uma rede neural MLP
+→ Predição
+→ Avaliação dos resultados
+```
 
-Windows PowerShell
-
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-
-
-2. Instalar as dependências
-
-pip install --upgrade pip
-pip install -r requirements.txt
-
-
-3. Registrar o kernel no Jupyter
-
-python -m ipykernel install --user --name yoga-t1 --display-name "Python (yoga-t1)"
-
-Esse comando registra o ambiente virtual como um kernel do Jupyter, garantindo que o notebook utilize o Python e os pacotes instalados no ambiente do projeto.
-
-Dependências
-
-O arquivo requirements.txt deve conter:
-
-opencv-python
-numpy
-pandas
-matplotlib
-seaborn
-scikit-learn
-jupyter
-ipykernel
-joblib
-
-
-## Estrutura do notebook
-
-O notebook `pipeline.ipynb` está organizado conforme as etapas principais do pipeline:
-
-1. **Aquisição da imagem**  
-   Nesta etapa, o dataset de poses de yoga é carregado a partir da pasta `dataset`. As imagens utilizadas no projeto estão organizadas em subpastas, em que cada subpasta representa uma classe de pose. Essa organização permite que o próprio nome da pasta seja utilizado como rótulo da imagem.
-
-2. **Leitura e organização dos dados**  
-   O notebook percorre automaticamente as pastas do dataset, identifica as classes disponíveis e armazena os caminhos das imagens junto com seus respectivos rótulos. Essa etapa transforma a organização em pastas em uma estrutura tabular, facilitando as próximas fases do pipeline.
-
-3. **Padronização espacial**  
-   Como as imagens possuem tamanhos e proporções diferentes, todas são redimensionadas para um tamanho fixo. Para evitar distorções na pose, é utilizado padding, preservando a proporção original da imagem e preenchendo as áreas restantes. Isso garante que todas as imagens tenham a mesma dimensão antes da extração de features.
-
-4. **Transformação para Grayscale**  
-   As imagens coloridas são convertidas para escala de cinza. Essa transformação reduz a quantidade de informação processada, pois elimina os canais de cor e mantém apenas a intensidade dos pixels. Essa etapa é adequada para o uso do HOG, que trabalha principalmente com variações de intensidade e gradientes da imagem.
-
-5. **Filtragem passa-baixa**  
-   É aplicado um filtro Gaussiano leve para suavizar a imagem e reduzir pequenos ruídos. Como o HOG depende de bordas e gradientes, a filtragem é usada com cuidado para não remover informações importantes da estrutura da pose. O objetivo é tornar a imagem mais estável antes da extração das características.
-
-6. **Extração de features com HOG**  
-   Nesta etapa, cada imagem é transformada em um vetor numérico usando o descritor HOG. O HOG analisa a distribuição das orientações dos gradientes da imagem, capturando informações relacionadas a bordas, contornos, inclinação do corpo e posição geral dos membros. Essas features são a principal representação usada pelo modelo para diferenciar as poses.
-
-7. **Treinamento do modelo**  
-   Após a extração das features, os dados são separados em treino e teste. As features são padronizadas com `StandardScaler`, garantindo que todas tenham escala semelhante. Em seguida, um classificador SVM é treinado com os vetores extraídos das imagens, aprendendo padrões associados a cada classe de pose.
-
-8. **Avaliação do modelo**  
-   O desempenho do modelo é avaliado no conjunto de teste, utilizando métricas como acurácia, precisão, recall e F1-score. Também é gerada uma matriz de confusão para visualizar quais poses foram classificadas corretamente e quais foram confundidas entre si. Essa etapa permite analisar tanto o desempenho geral quanto os principais erros do modelo.
-
-9. **Demo**  
-   Por fim, o notebook apresenta uma demonstração com uma nova imagem. Essa imagem passa pelas mesmas etapas do pipeline: padronização espacial, conversão para grayscale, filtragem passa-baixa e extração de features com HOG. Depois disso, o modelo treinado realiza a predição da classe, demonstrando como a metodologia pode ser aplicada a imagens externas.
+Essa abordagem busca representar melhor a estrutura corporal das poses, utilizando informações sobre alinhamento, postura, articulações e ângulos do corpo.

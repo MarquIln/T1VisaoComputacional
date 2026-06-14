@@ -9,4 +9,6 @@ tqdm
 joblib
 jupyter
 ipykernel
+ipywidgets
 pillow
+mediapipe
