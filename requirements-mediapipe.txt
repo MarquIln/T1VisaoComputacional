@@ -1,12 +1,12 @@
-opencv-python<4.13
 numpy<2
 pandas
 matplotlib
 seaborn
-scikit-image
 scikit-learn
 tqdm
-joblib
 jupyter
 ipykernel
 pillow
+opencv-contrib-python<4.12
+protobuf<5
+mediapipe<0.10.30
