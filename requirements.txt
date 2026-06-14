@@ -11,4 +11,6 @@ jupyter
 ipykernel
 ipywidgets
 pillow
-mediapipe
+opencv-contrib-python<4.12
+protobuf<5
+mediapipe<0.10.30
